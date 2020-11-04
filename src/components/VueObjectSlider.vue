@@ -1,21 +1,31 @@
 <template>
   <div class="object-slider">
+    <!--Next & Prev-->
     <button @click.prevent="prev()"
             :class="{'object-slider__prev':true, 'object-slider__nav':true, disabled:prevDisabled}"
-    ><i
-        class="ef ef-keyboard-arrow-left"></i></button>
+            v-show="viewportWidth>768"
+    >
+      <i class="ef ef-keyboard-arrow-left"></i>
+    </button>
     <button @click.prevent="next()"
             :class="{'object-slider__next':true, 'object-slider__nav':true,disabled: nextDisabled}"
-    ><i
-        class="ef ef-keyboard-arrow-right"></i></button>
-    <div class="object-slider__container" ref="container">
+            v-show="viewportWidth>768"
+    >
+      <i class="ef ef-keyboard-arrow-right"></i>
+    </button>
+    <!--// Next & Prev-->
+
+    <div class="object-slider__container" ref="container"
+         v-on:touchstart="touchStartHandler"
+         v-on:touchend="touchEndHandler"
+         v-on:touchmove="touchHandler">
       <div class="object-slider__viewport" :style="{
       'transform': 'translateX('+translateX+'px)',
        'transition': 'transform 0.2s ease-in-out 0s'
     }" ref="viewport">
         <div class="object-slider__slide"
              v-for="(item,key) in items" :key="key"
-             :style="{'min-width':item_width+'px','padding-right':gap+'px'}"
+             :style="{'min-width':slideWidth+'px','padding-right':slideGap+'px'}"
         >
           <div class="object-slider__card">
             <div class="object-slider__slider" v-if="item.images.length">
@@ -31,7 +41,7 @@
 
               </span>
                 <img :src="item.images[item.thumb]" alt="">
-                <span class="object-slider__slide-count">{{ item.thumb + 1}}/{{ item.images.length }}</span>
+                <span class="object-slider__slide-count">{{ item.thumb + 1 }}/{{ item.images.length }}</span>
               </a>
             </div>
             <div class="object-slider__body">
@@ -89,7 +99,9 @@ export default {
     return {
       translateX: 0,
       viewportWidth: 0,
-      activeSlide: 1
+      activeSlide: 1,
+      touchStart: false,
+      touchPosX: null
     }
   },
 
@@ -105,7 +117,7 @@ export default {
             area: 75,
             floor: 1,
             floorTotal: 5,
-            slideTransition:false,
+            slideTransition: false,
             address: 'Советский, ул. Полиграфический 1-й пер., д. 4',
             agent: {
               avatar: 'https://cdn.esoft.digital/240320/media/profiles/7b/32/392dd75e387714b8a57095106b7012a5d7dc388c.jpg',
@@ -127,7 +139,7 @@ export default {
             area: 75,
             floor: 1,
             floorTotal: 5,
-            slideTransition:false,
+            slideTransition: false,
             address: 'Советский, ул. Полиграфический 1-й пер., д. 4',
             agent: {
               avatar: 'https://cdn.esoft.digital/240320/media/profiles/7b/32/392dd75e387714b8a57095106b7012a5d7dc388c.jpg',
@@ -149,7 +161,7 @@ export default {
             area: 75,
             floor: 1,
             floorTotal: 5,
-            slideTransition:false,
+            slideTransition: false,
             address: 'Советский, ул. Полиграфический 1-й пер., д. 4',
             agent: {
               avatar: 'https://cdn.esoft.digital/240320/media/profiles/7b/32/392dd75e387714b8a57095106b7012a5d7dc388c.jpg',
@@ -171,7 +183,7 @@ export default {
             area: 75,
             floor: 1,
             floorTotal: 5,
-            slideTransition:false,
+            slideTransition: false,
             address: 'Советский, ул. Полиграфический 1-й пер., д. 4',
             agent: {
               avatar: 'https://cdn.esoft.digital/240320/media/profiles/7b/32/392dd75e387714b8a57095106b7012a5d7dc388c.jpg',
@@ -193,7 +205,7 @@ export default {
             area: 75,
             floor: 1,
             floorTotal: 5,
-            slideTransition:false,
+            slideTransition: false,
             address: 'Советский, ул. Полиграфический 1-й пер., д. 4',
             agent: {
               avatar: 'https://cdn.esoft.digital/240320/media/profiles/7b/32/392dd75e387714b8a57095106b7012a5d7dc388c.jpg',
@@ -215,7 +227,7 @@ export default {
             area: 75,
             floor: 1,
             floorTotal: 5,
-            slideTransition:false,
+            slideTransition: false,
             address: 'Советский, ул. Полиграфический 1-й пер., д. 4',
             agent: {
               avatar: 'https://cdn.esoft.digital/240320/media/profiles/7b/32/392dd75e387714b8a57095106b7012a5d7dc388c.jpg',
@@ -237,7 +249,7 @@ export default {
             area: 75,
             floor: 1,
             floorTotal: 5,
-            slideTransition:false,
+            slideTransition: false,
             address: 'Советский, ул. Полиграфический 1-й пер., д. 4',
             agent: {
               avatar: 'https://cdn.esoft.digital/240320/media/profiles/7b/32/392dd75e387714b8a57095106b7012a5d7dc388c.jpg',
@@ -259,7 +271,7 @@ export default {
             area: 75,
             floor: 1,
             floorTotal: 5,
-            slideTransition:false,
+            slideTransition: false,
             address: 'Советский, ул. Полиграфический 1-й пер., д. 4',
             agent: {
               avatar: 'https://cdn.esoft.digital/240320/media/profiles/7b/32/392dd75e387714b8a57095106b7012a5d7dc388c.jpg',
@@ -281,7 +293,7 @@ export default {
             area: 75,
             floor: 1,
             floorTotal: 5,
-            slideTransition:false,
+            slideTransition: false,
             address: 'Советский, ул. Полиграфический 1-й пер., д. 4',
             agent: {
               avatar: 'https://cdn.esoft.digital/240320/media/profiles/7b/32/392dd75e387714b8a57095106b7012a5d7dc388c.jpg',
@@ -303,7 +315,7 @@ export default {
             area: 75,
             floor: 1,
             floorTotal: 5,
-            slideTransition:false,
+            slideTransition: false,
             address: 'Советский, ул. Полиграфический 1-й пер., д. 4',
             agent: {
               avatar: 'https://cdn.esoft.digital/240320/media/profiles/7b/32/392dd75e387714b8a57095106b7012a5d7dc388c.jpg',
@@ -325,7 +337,7 @@ export default {
             area: 75,
             floor: 1,
             floorTotal: 5,
-            slideTransition:false,
+            slideTransition: false,
             address: 'Советский, ул. Полиграфический 1-й пер., д. 4',
             agent: {
               avatar: 'https://cdn.esoft.digital/240320/media/profiles/7b/32/392dd75e387714b8a57095106b7012a5d7dc388c.jpg',
@@ -360,8 +372,22 @@ export default {
     }
   },
   computed: {
+    slideWidth() {
+      if (this.viewportWidth < 768) {
+        return this.viewportWidth - 25
+      }
+
+      return this.item_width
+    },
+    slideGap() {
+      if (this.viewportWidth < 768) {
+        return 10
+      }
+
+      return this.gap
+    },
     containerWidth() {
-      return this.item_width * this.items.length
+      return this.slideWidth * this.items.length
     },
     prevDisabled() {
       return this.translateX >= 0
@@ -378,6 +404,33 @@ export default {
     });
   },
   methods: {
+    touchStartHandler(e) {
+      if (this.touchStart) return
+      this.touchStart = true
+      this.touchPosX = e.changedTouches[0]['clientX']
+
+    },
+    touchHandler(e) {
+
+      if (!this.touchStart) return
+
+      let touchDiff = Math.abs(this.touchPosX - e.changedTouches[0]['clientX'])
+
+      if (this.touchPosX - e.changedTouches[0]['clientX'] < 0) {
+        this.translateX = this.translateX + touchDiff > 0 ? 0 : this.translateX + touchDiff
+      } else {
+        this.translateX =this.containerWidth + this.translateX - this.viewportWidth < 0 ?  this.translateX  :  this.translateX - touchDiff
+      }
+
+      this.touchPosX = e.changedTouches[0]['clientX']
+
+    },
+    touchEndHandler(e) {
+      if (!this.touchStart) return
+      this.touchStart = false
+      this.touchPosX = e.changedTouches[0]['clientX']
+
+    },
     thumbNext(item) {
       item.slideTransition = true
       setTimeout(() => {
@@ -430,7 +483,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import "../style";
 
 </style>

@@ -1540,3 +1540,11 @@ $font__pt_sans:"PT Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
 
   }
 }
+
+@media screen and (max-width: 768px){
+  .object-slider__slider-arrow{
+    opacity: 1;
+    width: 38px;
+    height: 38px
+  }
+}
